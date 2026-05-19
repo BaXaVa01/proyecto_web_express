@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Web Express - Inicio</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a th:href="@{/}" class="logo">Tienda Web <span>Express</span></a>
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li><a th:href="@{/productos}">Catálogo</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Bienvenidos a nuestra tienda</h1>
+                <p>Encuentra los mejores productos al mejor precio.</p>
+                <a th:href="@{/productos}" class="btn-primary">Ver Catálogo</a>
+            </div>
+        </section>
+
+        <section class="featured">
+            <div class="container">
+                <h2>Productos Destacados</h2>
+                <div class="product-grid">
+                    <div th:each="prod : ${productosDestacados}" class="product-card">
+                        <img th:src="@{'/img/' + ${prod.imagen}}" th:alt="${prod.nombre}" onerror="this.src='https://via.placeholder.com/200'">
+                        <div class="product-info">
+                            <h3 th:text="${prod.nombre}">Nombre Producto</h3>
+                            <p class="price" th:text="'$' + ${prod.precio}">$0.00</p>
+                            <a th:href="@{/productos/{id}(id=${prod.id})}" class="btn-secondary">Ver Detalle</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Tienda Web Express - Proyecto Universitario</p>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>

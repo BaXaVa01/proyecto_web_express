@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${producto.nombre} + ' - Tienda Web Express'">Detalle - Tienda Web Express</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a th:href="@{/}" class="logo">Tienda Web <span>Express</span></a>
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li><a th:href="@{/productos}">Catálogo</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div th:if="${producto == null}" class="error-msg">
+            <p>Producto no encontrado.</p>
+            <a th:href="@{/productos}" class="btn-primary">Volver al catálogo</a>
+        </div>
+
+        <div th:if="${producto != null}" class="product-detail">
+            <div class="detail-image">
+                <img th:src="@{'/img/' + ${producto.imagen}}" th:alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/400'">
+            </div>
+            <div class="detail-info">
+                <span class="category-tag" th:text="${producto.categoriaNombre}">Categoría</span>
+                <h1 th:text="${producto.nombre}">Nombre Producto</h1>
+                <p class="price" th:text="'$' + ${producto.precio}">$0.00</p>
+                <div class="description">
+                    <h3>Descripción:</h3>
+                    <p th:text="${producto.descripcion}">Descripción del producto...</p>
+                </div>
+                <div class="stock-info">
+                    <p th:if="${producto.stock > 0}">Disponibilidad: <span class="in-stock" th:text="${producto.stock} + ' unidades'">En stock</span></p>
+                    <p th:if="${producto.stock <= 0}" class="out-of-stock">Agotado</p>
+                </div>
+                
+                <div class="actions" th:if="${producto.stock > 0}">
+                    <a th:href="@{/pedido(productoId=${producto.id})}" class="btn-primary">Solicitar Producto</a>
+                    <button class="btn-secondary" onclick="agregarAlCarrito()">Agregar al Carrito (Simulado)</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Tienda Web Express - Proyecto Universitario</p>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>
