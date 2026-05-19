@@ -33,7 +33,9 @@
                 <h2>Productos Destacados</h2>
                 <div class="product-grid">
                     <div th:each="prod : ${productosDestacados}" class="product-card">
-                        <img th:src="@{'/img/' + ${prod.imagen}}" th:alt="${prod.nombre}" onerror="this.src='https://via.placeholder.com/200'">
+                        <div class="card-img-wrapper">
+                            <img th:src="@{'/img/' + ${prod.imagen}}" th:alt="${prod.nombre}" onerror="this.src='https://via.placeholder.com/200'">
+                        </div>
                         <div class="product-info">
                             <h3 th:text="${prod.nombre}">Nombre Producto</h3>
                             <p class="price" th:text="'$' + ${prod.precio}">$0.00</p>
