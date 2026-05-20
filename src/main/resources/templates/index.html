@@ -12,8 +12,9 @@
             <div class="container">
                 <a th:href="@{/}" class="logo">Tienda Web <span>Express</span></a>
                 <ul class="nav-links">
-                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li><a th:href="@{/}" class="active">Inicio</a></li>
                     <li><a th:href="@{/productos}">Catálogo</a></li>
+                    <li><a th:href="@{/carrito}">Carrito <span class="cart-badge" th:if="${session.carrito != null and not #lists.isEmpty(session.carrito)}" th:text="${#lists.size(session.carrito)}">0</span></a></li>
                 </ul>
             </div>
         </nav>

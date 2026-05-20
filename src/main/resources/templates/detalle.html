@@ -14,6 +14,7 @@
                 <ul class="nav-links">
                     <li><a th:href="@{/}">Inicio</a></li>
                     <li><a th:href="@{/productos}">Catálogo</a></li>
+                    <li><a th:href="@{/carrito}">Carrito <span class="cart-badge" th:if="${session.carrito != null and not #lists.isEmpty(session.carrito)}" th:text="${#lists.size(session.carrito)}">0</span></a></li>
                 </ul>
             </div>
         </nav>
@@ -43,8 +44,11 @@
                 </div>
                 
                 <div class="actions" th:if="${producto.stock > 0}">
-                    <a th:href="@{/pedido(productoId=${producto.id})}" class="btn-primary">Solicitar Producto</a>
-                    <button class="btn-secondary" onclick="agregarAlCarrito()">Agregar al Carrito (Simulado)</button>
+                    <form th:action="@{/carrito/agregar}" method="post" style="display: inline;">
+                        <input type="hidden" name="productoId" th:value="${producto.id}">
+                        <button type="submit" class="btn-primary">Añadir al Carrito</button>
+                    </form>
+                    <a th:href="@{/productos}" class="btn-secondary">Volver al Catálogo</a>
                 </div>
             </div>
         </div>

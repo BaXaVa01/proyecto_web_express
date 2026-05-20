@@ -14,24 +14,43 @@
                 <ul class="nav-links">
                     <li><a th:href="@{/}">Inicio</a></li>
                     <li><a th:href="@{/productos}" class="active">Catálogo</a></li>
+                    <li><a th:href="@{/carrito}">Carrito <span class="cart-badge" th:if="${session.carrito != null and not #lists.isEmpty(session.carrito)}" th:text="${#lists.size(session.carrito)}">0</span></a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
     <main class="container">
+        <div th:if="${param.mensaje != null and param.mensaje[0] == 'pedido_exitoso'}" class="alert-success">
+            ¡Su pedido ha sido procesado con éxito! Gracias por su compra.
+        </div>
+
         <h1>Nuestro Catálogo</h1>
 
         <div class="filters">
-            <h3>Filtrar por Categoría:</h3>
-            <div class="category-list">
-                <a th:href="@{/productos}" 
-                   th:class="${categoriaSeleccionada == null} ? 'btn-filter active' : 'btn-filter'">Todas</a>
-                <a th:each="cat : ${categorias}" 
-                   th:href="@{/productos(categoriaId=${cat.id})}"
-                   th:text="${cat.nombre}"
-                   th:class="${categoriaSeleccionada == cat.id} ? 'btn-filter active' : 'btn-filter'">Categoría</a>
-            </div>
+            <form th:action="@{/productos}" method="get" class="search-form">
+                <div class="search-grid">
+                    <div class="form-group">
+                        <label for="nombre">Buscar por nombre:</label>
+                        <input type="text" name="nombre" id="nombre" th:value="${nombreBusqueda}" 
+                               placeholder="Nombre del producto..." class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="categoriaId">Categoría:</label>
+                        <select name="categoriaId" id="categoriaId" class="form-control">
+                            <option value="">Todas las categorías</option>
+                            <option th:each="cat : ${categorias}" 
+                                    th:value="${cat.id}" 
+                                    th:text="${cat.nombre}"
+                                    th:selected="${categoriaSeleccionada == cat.id}">Categoría</option>
+                        </select>
+                    </div>
+                    <div class="search-actions">
+                        <button type="submit" class="btn-primary">Buscar</button>
+                        <a th:href="@{/productos}" class="btn-secondary">Limpiar filtros</a>
+                    </div>
+                </div>
+            </form>
         </div>
 
         <div class="product-grid">
@@ -43,11 +62,17 @@
                     <span class="category-tag" th:text="${prod.categoriaNombre}">Categoría</span>
                     <h3 th:text="${prod.nombre}">Nombre Producto</h3>
                     <p class="price" th:text="'$' + ${prod.precio}">$0.00</p>
-                    <a th:href="@{/productos/{id}(id=${prod.id})}" class="btn-secondary">Ver Detalle</a>
+                    <div class="card-actions">
+                        <a th:href="@{/productos/{id}(id=${prod.id})}" class="btn-secondary">Detalle</a>
+                        <form th:action="@{/carrito/agregar}" method="post" style="display: inline;">
+                            <input type="hidden" name="productoId" th:value="${prod.id}">
+                            <button type="submit" class="btn-primary">Añadir</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div th:if="${#lists.isEmpty(productos)}" class="no-results">
-                <p>No se encontraron productos en esta categoría.</p>
+            <div th:if="${#lists.isEmpty(productos)}" class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <p style="font-size: 1.2rem; color: var(--text-muted);">No se encontraron productos coincidentes.</p>
             </div>
         </div>
     </main>

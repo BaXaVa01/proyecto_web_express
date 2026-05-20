@@ -19,14 +19,13 @@ public class ProductoController {
     private final CategoriaService categoriaService;
 
     @GetMapping
-    public String catalogo(@RequestParam(required = false) Long categoriaId, Model model) {
-        if (categoriaId != null) {
-            model.addAttribute("productos", productoService.listarPorCategoria(categoriaId));
-            model.addAttribute("categoriaSeleccionada", categoriaId);
-        } else {
-            model.addAttribute("productos", productoService.listarTodos());
-        }
+    public String catalogo(@RequestParam(required = false) Long categoriaId, 
+                           @RequestParam(required = false) String nombre, 
+                           Model model) {
+        model.addAttribute("productos", productoService.buscarProductos(nombre, categoriaId));
         model.addAttribute("categorias", categoriaService.listarTodas());
+        model.addAttribute("categoriaSeleccionada", categoriaId);
+        model.addAttribute("nombreBusqueda", nombre);
         return "catalogo";
     }
 
